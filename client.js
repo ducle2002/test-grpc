@@ -19,12 +19,12 @@ client.createTodo({
 
 })
 
-// client.readTodos(null, (err, response) => {
-//
-//     console.log("read the todos from server " + JSON.stringify(response))
-//     if (!response.items)
-//         response.items.forEach(a=>console.log(a.text));
-// })
+client.readTodos(null, (err, response) => {
+
+    console.log("read the todos from server " + JSON.stringify(response))
+    if (!response.items)
+        response.items.forEach(a=>console.log(a.text));
+})
 
 
 const call = client.readTodosStream();
