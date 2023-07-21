@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package userPackage;
+
+service Users {
+
+  rpc createUser(UserAccount) returns (UserAccount);
+  rpc deleteUser(UserAccount) returns (UserAccount);
+  rpc readUsers(voidNoParam) returns (UserAccounts);
+
+}
+
+message voidNoParam {}
+
+message UserAccount {
+  string name=1;
+  int32 roleId=2;
+  string phone=3;
+}
+
+message UserAccounts {
+  repeated UserAccount Accounts = 1;
+}

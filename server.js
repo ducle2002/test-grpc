@@ -1,8 +1,8 @@
 const grpc = require("@grpc/grpc-js");
 const protoLoader = require("@grpc/proto-loader")
-const packageDef = protoLoader.loadSync("todo.proto", {});
+const packageDef = protoLoader.loadSync("user.proto", {});
 const grpcObject = grpc.loadPackageDefinition(packageDef);
-const todoPackage = grpcObject.todoPackage;
+const userPackage = grpcObject.userPackage;
 
 const PORT = 8083
 
@@ -17,31 +17,34 @@ server.bindAsync(`0.0.0.0:${PORT}`, grpc.ServerCredentials.createInsecure(),
         server.start()
     })
 
-server.addService(todoPackage.Todo.service,
+server.addService(userPackage.Users.service,
     {
-        "createTodo": createTodo,
-        "readTodos" : readTodos,
-        "readTodosStream": readTodosStream
+        "createUser": createUser,
+        "deleteUser": deleteUser,
+        "readUsers" : readUsers
     });
 // server.start();
 
-const todos = []
-function createTodo (call, callback) {
-    const todoItem = {
-        "id": todos.length + 1,
-        "text": call.request.text
+const users = []
+function createUser (call, callback) {
+    const userAccount = {
+        "name": call.request.name,
+        "roleId": call.request.roleId,
+        "phone": call.request.phone
     }
-    todos.push(todoItem)
-    callback(null, todoItem);
+    users.push(userAccount)
+    callback(null, userAccount);
 }
 
-function readTodosStream(call, callback) {
-
-    todos.forEach(t => call.write(t));
-    call.end();
+function deleteUser(call, callback) {
+    const found = users.find(element => element.name == call.request.name);
+    const index = users.indexOf(found);
+    if (index > -1) { // only splice array when item is found
+        users.splice(index, 1); // 2nd parameter means remove one item only
+    }
+    callback(null, index);
 }
 
-
-function readTodos(call, callback) {
-    callback(null, {"items": todos})
+function readUsers(call, callback) {
+    callback(null, {"Accounts": users})
 }

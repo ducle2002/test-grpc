@@ -4,7 +4,7 @@ const packageDef = protoLoader.loadSync("todo.proto", {});
 const grpcObject = grpc.loadPackageDefinition(packageDef);
 const todoPackage = grpcObject.todoPackage;
 
-const text = process.argv[2];
+const text = process.argv[3];
 
 const client = new todoPackage.Todo("localhost:8083",
     grpc.credentials.createInsecure())
